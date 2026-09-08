@@ -1,0 +1,17 @@
+{
+  "provider": "photon",
+  "allowedSenders": ["+15551234567"],
+  "serviceNumber": "shared",
+  "allowSharedSandbox": true,
+  "providerApiKey": "REPLACE_WITH_PHOTON_PROJECT_ID",
+  "providerApiSecret": "REPLACE_WITH_PHOTON_PROJECT_SECRET",
+  "webhookSecret": "REPLACE_WITH_WEBHOOK_SIGNING_SECRET",
+  "backend": "desktop",
+  "desktopThreadId": "REPLACE_WITH_EXPLICITLY_CREATED_TASK_ID",
+  "codexBinary": "/Applications/ChatGPT.app/Contents/Resources/codex",
+  "cwd": "/Users/YOUR_USERNAME/Code/iMessage-Agent",
+  "artifactsDir": "/Users/YOUR_USERNAME/Code/iMessage-Agent/outputs",
+  "dataDir": "/Users/YOUR_USERNAME/.config/codex-imessage/data",
+  "port": 8787,
+  "fullAccess": true
+}

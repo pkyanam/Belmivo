@@ -1,0 +1,17 @@
+{
+  "name": "belmivo-relay",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "test:integration": "node --test test/integration/*.test.mjs",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "miniflare": "5.20260820.0-alpha",
+    "wrangler": "4.125.0"
+  }
+}

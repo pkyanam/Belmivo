@@ -1,0 +1,17 @@
+{
+  "provider": "linq",
+  "allowedSenders": ["+15551234567"],
+  "serviceNumber": "+15557654321",
+  "providerApiKey": "REPLACE_WITH_PROVIDER_API_KEY",
+  "webhookSecret": "REPLACE_WITH_PROVIDER_WEBHOOK_SIGNING_SECRET",
+  "backend": "app-server",
+  "codexBinary": "/Applications/ChatGPT.app/Contents/Resources/codex",
+  "cwd": "/Users/YOUR_USERNAME/Code/iMessage-Agent",
+  "dataDir": "/Users/YOUR_USERNAME/.config/codex-imessage/data",
+  "port": 8787,
+  "fullAccess": true,
+  "maxPending": 20,
+  "maxTextChars": 16000,
+  "maxReplyChars": 12000,
+  "turnTimeoutMs": 1200000
+}

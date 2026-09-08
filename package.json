@@ -1,0 +1,52 @@
+{
+  "name": "belmivo",
+  "version": "0.1.0",
+  "description": "Text your personal AI agent through iMessage",
+  "type": "module",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pkyanam/Belmivo.git"
+  },
+  "homepage": "https://github.com/pkyanam/Belmivo#readme",
+  "bugs": {
+    "url": "https://github.com/pkyanam/Belmivo/issues"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "bin": {
+    "belmivo": "dist/src/cli.js",
+    "codex-imessage": "dist/src/cli.js"
+  },
+  "files": [
+    "dist/src",
+    "README.md",
+    "AGENTS.md",
+    "docs",
+    "relay/README.md",
+    "LICENSE",
+    "examples",
+    "scripts",
+    "NOTICE",
+    "npm-shrinkwrap.json"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "check": "tsc --noEmit",
+    "test": "npm run build && node --test dist/test/*.test.js scripts/test-launchd-lifecycle.mjs",
+    "start": "node dist/src/cli.js start",
+    "dev": "node --experimental-strip-types src/cli.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0"
+  },
+  "dependencies": {
+    "@spectrum-ts/core": "12.8.0",
+    "@spectrum-ts/imessage": "12.8.0"
+  },
+  "overrides": {
+    "@opentelemetry/core": "2.11.0"
+  }
+}
