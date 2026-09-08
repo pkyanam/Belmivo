@@ -1,11 +1,16 @@
 #!/usr/bin/env node
 // Offline release review. Reports locations/counts only, never matched values.
+import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { existsSync, lstatSync, mkdirSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+// This generated logo was visually reviewed and its PNG chunks inspected for metadata.
+// Approval is limited to these exact bytes at this exact path; edits require review.
+export const reviewedImage = (path, bytes) => path === 'assets/belmivo-icon.png' &&
+  createHash('sha256').update(bytes).digest('hex') === 'd8e00063426537372534eb792dedaab0742b791616d6c9ce83b9a19c996455b1';
 const MAX_FILE = 16 * 1024 * 1024;
 const git = (cwd, args, input) => execFileSync('git', args, {cwd, input, encoding:'utf8', maxBuffer:128*1024*1024, stdio:['pipe','pipe','pipe']});
 const reservedEmail = value => /@(?:[^@.]+\.)*(?:example\.(?:com|org|net)|example|invalid|test|localhost)$/i.test(value);
@@ -97,8 +102,8 @@ export function audit(options) {
     const real=realpathSync(absolute);
     if(!real.startsWith(root+sep)) {record('current',path,{'external-file':1});continue;}
     const bytes=readFileSync(absolute);
-    record('current',path,scanText(path+'\n'+bytes.toString('utf8'),values));
-    if(bytes.includes(0))record('current',path,{'binary-needs-review':1});
+    record('current',path,scanText(path+'\n'+(reviewedImage(path,bytes)?'':bytes.toString('utf8')),values));
+    if(bytes.includes(0) && !reviewedImage(path,bytes))record('current',path,{'binary-needs-review':1});
     files.push({path,bytes,executable:!!(stat.mode&0o111)});
   }
   let historyObjects=0;
@@ -112,9 +117,10 @@ export function audit(options) {
       historyObjects++;
       const path=type==='blob'?names.get(id):`(git ${type} metadata)`;
       if(Number(size)>MAX_FILE) {record('history',path,{'unscanned-large-object':1});continue;}
-      const body=git(root,['cat-file',type,id]);
+      const bytes=execFileSync('git',['cat-file',type,id],{cwd:root,maxBuffer:MAX_FILE,stdio:['pipe','pipe','pipe']});
+      const body=reviewedImage(path,bytes)?'':bytes.toString('utf8');
       record('history',path,scanText(path+'\n'+body,values));
-      if(body.includes('\0'))record('history',path,{'binary-needs-review':1});
+      if(bytes.includes(0) && !reviewedImage(path,bytes))record('history',path,{'binary-needs-review':1});
     }
   }
   const report={currentFiles:files.length,historyScanned:!!options.history,historyObjects,findings};

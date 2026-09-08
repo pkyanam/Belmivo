@@ -69,3 +69,15 @@ test('patterns-only audit works without access to a private configuration',t=>{
   const result=audit({repo:f.repo,patternsOnly:true,config:join(f.base,'does-not-exist')});
   assert.deepEqual(result.findings,[]);
 });
+
+test('only the exact reviewed logo is accepted in worktree and history',t=>{
+  const f=fixture(t),logo=readFileSync(new URL('../assets/belmivo-icon.png',import.meta.url));
+  mkdirSync(join(f.repo,'assets'));
+  const path=join(f.repo,'assets/belmivo-icon.png');writeFileSync(path,logo);git(f.repo,['add','.']);
+  git(f.repo,['-c','user.name=Release Fixture','-c','user.email=fixture@example.test','commit','-m','reviewed logo']);
+  assert.deepEqual(audit({...f,history:true}).findings,[]);
+  writeFileSync(path,Buffer.concat([logo,Buffer.from('changed')]));
+  assert.ok(audit(f).findings.some(x=>x.counts['binary-needs-review']));
+  writeFileSync(path,logo);writeFileSync(join(f.repo,'other.png'),logo);git(f.repo,['add','.']);
+  assert.ok(audit(f).findings.some(x=>x.path==='other.png'&&x.counts['binary-needs-review']));
+});

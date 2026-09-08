@@ -1,5 +1,7 @@
 # Belmivo
 
+<img src="assets/belmivo-icon.png" width="112" height="112" alt="Belmivo: a bridge inside a speech bubble">
+
 **Text your Mac's AI agent. Get the reply in iMessage.**
 
 Belmivo is a self-hosted bridge between an approved iMessage sender and Codex on your Mac. It receives authenticated provider webhooks, runs work in a dedicated task, and sends the response back to the same conversation.
